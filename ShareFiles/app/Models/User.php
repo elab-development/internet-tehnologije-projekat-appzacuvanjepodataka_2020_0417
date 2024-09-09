@@ -42,4 +42,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * The companies that the user belongs to.
+     */
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class, 'company_user')->withTimestamps();
+    }
+
+    /**
+     * Companies where the user is the admin.
+     */
+    public function ownedCompanies()
+    {
+        return $this->hasMany(Company::class, 'admin_id');
+    }
 }

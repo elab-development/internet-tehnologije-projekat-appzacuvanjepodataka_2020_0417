@@ -68,7 +68,7 @@ Route::get('oauth/google', function () {
     $client = new Google_Client();
     $client->setClientId(env('GOOGLE_DRIVE_CLIENT_ID'));
     $client->setClientSecret(env('GOOGLE_DRIVE_CLIENT_SECRET'));
-    $client->setRedirectUri('http://localhost:8001/oauth/google/callback');
+    $client->setRedirectUri('http://localhost:8003/oauth/google/callback');
     $client->addScope(Google_Service_Drive::DRIVE);
 
     return redirect()->away($client->createAuthUrl());
@@ -78,7 +78,7 @@ Route::get('oauth/google/callback', function () {
     $client = new Google_Client();
     $client->setClientId(env('GOOGLE_DRIVE_CLIENT_ID'));
     $client->setClientSecret(env('GOOGLE_DRIVE_CLIENT_SECRET'));
-    $client->setRedirectUri('http://localhost:8001/oauth/google/callback');
+    $client->setRedirectUri('http://localhost:8003/oauth/google/callback');
 
     $client->fetchAccessTokenWithAuthCode(request('code'));
     $token = $client->getAccessToken();
