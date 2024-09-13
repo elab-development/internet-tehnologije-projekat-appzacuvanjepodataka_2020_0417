@@ -16,6 +16,7 @@ const CompanyPage = () => {
     const [uploadStatus, setUploadStatus] = useState(null); // State to track upload status
     const [isAdmin, setIsAdmin] = useState(false);
     const [currentUserId, setCurrentUserId] = useState(null);
+    const [isSorted, setIsSorted] = useState(false);
 
     useEffect(() => {
         const fetchCurrentUser = async () => {
@@ -210,6 +211,7 @@ const CompanyPage = () => {
             return;
         }
 
+
         // Convert JSON to CSV
         const csv = convertJsonToCsv(users.map(user => ({
             ID: user.id,
@@ -227,6 +229,13 @@ const CompanyPage = () => {
         document.body.appendChild(link);
         link.click();
         link.remove();
+    };
+
+    // Function to handle sorting
+    const handleSortUsers = () => {
+        const sortedUsers = [...users].sort((a, b) => a.name.localeCompare(b.name));
+        setUsers(sortedUsers);
+        setIsSorted(true); // Update sorting state
     };
 
     const convertJsonToCsv = (jsonData) => {
@@ -296,6 +305,11 @@ const CompanyPage = () => {
             {isAdmin && (
                 <button className="btn btn-primary" onClick={() => setShowAddUserModal(true)}>Add User</button>
             )}
+
+            <button className="btn btn-primary" onClick={handleSortUsers}>
+                {isSorted ? 'Sorted Alphabetically' : 'Sort Alphabetically'}
+            </button>
+
             {users.length === 0 ? (
                 <p>No users found for this company.</p>
             ) : (
