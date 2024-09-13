@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const RegisterPage = () => {
@@ -8,6 +8,34 @@ const RegisterPage = () => {
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userName, setUserName] = useState('');
+
+    useEffect(() => {
+        // Check if user is logged in
+        const checkAuth = async () => {
+            
+            const token = localStorage.getItem('token'); // Get token from localStorage
+            
+            try {
+                const response = await axios.get('/api/user', {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Include token in headers
+                    },
+                }); // Replace with your endpoint to get logged-in user
+                
+
+                if (response.status === 200) {
+                    setIsLoggedIn(true);
+                    setUserName(response.data.name); // Adjust according to the API response
+                }
+            } catch (err) {
+                setIsLoggedIn(false);
+            }
+        };
+        
+        checkAuth();
+    }, []);
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -37,6 +65,14 @@ const RegisterPage = () => {
             }
         }
     };
+
+    if (isLoggedIn) {
+        return (
+            <div className="container">
+                <h2>You are already logged in as {userName}</h2>
+            </div>
+        );
+    }
 
     return (
         <div className="container">

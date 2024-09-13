@@ -47,6 +47,14 @@ const LoginPage = () => {
                 />
                 <button type="submit">Login</button>
             </form>
+            <div className="mt-3">
+                <button
+                    className="btn btn-secondary"
+                    onClick={() => navigate('/register')}
+                >
+                    Register
+                </button>
+            </div>
         </div>
     );
 };
