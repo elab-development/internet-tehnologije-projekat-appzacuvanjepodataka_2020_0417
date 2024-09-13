@@ -11,6 +11,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import ApiTestingPage from './pages/ApiTestingPage';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
                     <Route path="/dashboard/:companyName" element={<CompanyPage />} />  
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/apitesting" element= {<ApiTestingPage />} />
                     {/* Rute za 404 page */}
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
