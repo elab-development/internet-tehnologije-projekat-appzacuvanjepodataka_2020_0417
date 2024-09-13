@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { uploadFile, removeFile, fetchCompanyFiles, downloadFile } from '../components/ApiService';
-
+import Papa from 'papaparse';
 
 const CompanyPage = () => {
     const { companyName } = useParams();  // Get the company name from the URL
@@ -204,6 +204,41 @@ const CompanyPage = () => {
         }
     };
 
+    const handleExportUsers = () => {
+        if (users.length === 0) {
+            setError('No users to export');
+            return;
+        }
+
+        // Convert JSON to CSV
+        const csv = convertJsonToCsv(users.map(user => ({
+            ID: user.id,
+            Name: user.name,
+            Email: user.email,
+            Role: user.is_admin ? 'Admin' : 'Member',
+        })));
+
+        // Create a Blob from the CSV data and trigger download
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'users.csv');
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+    };
+
+    const convertJsonToCsv = (jsonData) => {
+        // Convert JSON to CSV format using PapaParse
+        return Papa.unparse(jsonData, {
+            header: true,
+            quotes: true,
+            delimiter: ',',
+            skipEmptyLines: true,
+        });
+    };
+
     const fetchUsers = async () => {
         const token = localStorage.getItem('token'); // Get token from localStorage
 
@@ -274,7 +309,12 @@ const CompanyPage = () => {
                         </li>
                     ))}
                 </ul>
+                
             )}
+
+            <button onClick={handleExportUsers} className="btn btn-primary">
+                Export Users to CSV
+            </button>
 
             {/* Add User Modal */} 
             {showAddUserModal  && (
